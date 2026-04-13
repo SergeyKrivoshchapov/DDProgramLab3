@@ -23,9 +23,9 @@ func LoadUsers(fileName *C.char) C.int {
 //export Authenticate
 func Authenticate(name, password *C.char) C.int {
 	if auth.AuthenticateUser(C.GoString(name), C.GoString(password)) {
-		return 1
+		return 0
 	}
-	return 0
+	return -1
 }
 
 //export GetAllPermissions
