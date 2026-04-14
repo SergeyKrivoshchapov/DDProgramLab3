@@ -58,21 +58,6 @@ func GetMenuItem(path *C.char) C.MenuItemStruct {
 	}
 }
 
-//export GetMenuItemStatus
-func GetMenuItemStatus(path *C.char) C.int {
-	item := menu.GetItemByPath(C.GoString(path))
-	if item == nil {
-		return -1
-	}
-	return C.int(item.Status)
-}
-
-//export GetMethodByName
-func GetMethodByName(name *C.char) *C.char {
-	method := menu.FindMethodByName(C.GoString(name))
-	return C.CString(method)
-}
-
 //export FreeMenuItem
 func FreeMenuItem(item C.MenuItemStruct) {
 	if item.Name != nil {
