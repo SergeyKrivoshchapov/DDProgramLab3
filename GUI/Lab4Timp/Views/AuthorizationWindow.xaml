@@ -1,0 +1,116 @@
+﻿<Window x:Class="Lab4Timp.Views.AuthorizationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab4Timp.Views"
+        xmlns:localVM="clr-namespace:Lab4Timp.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=localVM:AuthorizationWinVM}"
+        Title="AuthorizationWindow" Height="250" Width="400"
+        Background="AliceBlue"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="SingleBorderWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Верхняя информация -->
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="/Resources/keys.jpg" Width="40" Height="40"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="АИС Отдел кадров" FlowDirection="RightToLeft"
+                       Background="LightYellow"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Версия 1.0.0.0" FlowDirection="RightToLeft" 
+                       Background="Wheat"/>
+        </Grid>
+
+        <TextBlock Grid.Row="1" Text="Введите имя пользователя и пароль" FlowDirection="RightToLeft" 
+                   Background="White"/>
+        
+        <!-- Поле ввода и кнопки Вход, Отмена -->
+        
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="0.4*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="Имя пользователя:" Width="120" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Height="20" Width="240"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="Пароль:" Width="120" VerticalAlignment="Center"/>
+                    <PasswordBox Height="20" Width="240" PasswordChanged="PasswordBox_OnPasswordChanged"/>
+                </StackPanel>
+            </StackPanel>
+
+
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="Вход" Height="20" Width="80" HorizontalAlignment="Left" Command="{Binding Enter}"/>
+                <Button Grid.Column="1" Content="Отмена" Height="20" Width="80" HorizontalAlignment="Right" Command="{Binding Cancel}"/>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" FlowDirection="LeftToRight">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="Язык ввода неизвестно"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding InputLanguage}" Value="RU">
+                                <Setter Property="Text" Value="Язык ввода Русский"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding InputLanguage}" Value="EN">
+                                <Setter Property="Text" Value="Язык ввода Английский"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBlock Grid.Column="1" FlowDirection="RightToLeft">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="Клавиша CapsLock не нажата"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsCapsLockOn}" Value="True">
+                                <Setter Property="Text" Value="Клавиша CapsLock нажата"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <ResizeGrip Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="White"/>
+        </Grid>
+
+    </Grid>
+</Window>
