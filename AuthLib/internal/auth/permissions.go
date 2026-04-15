@@ -14,7 +14,7 @@ func GetAllPermissionsString(userName string) string {
 
 	var parts []string
 	for item, status := range user.Permissions {
-		parts = append(parts, fmt.Sprintf("%s:%s", item, status))
+		parts = append(parts, fmt.Sprintf("%s:%d", item, status))
 	}
 	return strings.Join(parts, ",")
 }
