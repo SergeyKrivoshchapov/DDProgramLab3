@@ -8,7 +8,7 @@ namespace Lab4Timp.Models
     {
         public string Name;
         public string Method;
-        public int Status;
+        public int Status; // В go коде возвращается string
         public int ChildrenCount;
     }
 
@@ -41,7 +41,35 @@ namespace Lab4Timp.Models
     /*private const string AuthDllName = "AuthLib.dll";
         private const string MenuDllName = "MenuLib.dll";*/
 
+    class AuthDllImplicit : IAuthDll
+    {
+        private const string AuthDllName = "AuthLib.dll";
+
+        public int LoadAllUsers(string fileName)
+        {
+
+        }
+
+        public int Authorization(string name, string password)
+        {
+
+        }
+
+        public string GetPermissions(string userName)
+        {
+
+        }
+
+        public void FreeAllPermissions(string p)
+        {
+
+        }
+    }
+
+    class AuthDllExplicit : IAuthDll
+    {
+        private const string AuthDllName = "AuthLib.dll";
+    }
 
 
-    
 }
