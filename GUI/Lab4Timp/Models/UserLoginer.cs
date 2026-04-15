@@ -108,7 +108,6 @@ namespace Lab4Timp.Models
                 var managed = new MenuItem
                 {
                     Header = nameStr,
-                    // Здесь подставь фабрику команд по имени метода:
                     Command = ResolveCommand(methodStr ?? string.Empty),
                     IsVisible = nativeItem.Status != 2,
                     IsEnabled = nativeItem.Status != 1
@@ -126,14 +125,12 @@ namespace Lab4Timp.Models
             }
             finally
             {
-                // Освобождение native-строк Name/Method
                 _menuDll.FreeMenuItemFunc(nativeItem);
             }
         }
 
         private ICommand ResolveCommand(string method)
         {
-            // Заглушка: замени на свою реальную резолв-логику
             return new RelayCommand(() => MessageBox.Show($"Вызван {method}"));
         }
     }
