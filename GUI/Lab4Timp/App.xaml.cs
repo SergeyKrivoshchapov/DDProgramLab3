@@ -4,6 +4,7 @@ using System.Data;
 using System.Windows;
 using Lab4Timp.Services;
 using Lab4Timp.ViewModels;
+using Lab4Timp.Models;
 
 namespace Lab4Timp
 {
@@ -29,8 +30,20 @@ namespace Lab4Timp
 
             dialogService.Register<AuthorizationWinVM>(vm => new AuthorizationWindow(vm));
 
-            ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService, keyboardStateService, new Models.UserLoginer());
+            IAuthDll authDllIm = new AuthDllImplicit();
+            IAuthDll authDllEx = new AuthDllExplicit();
+
+            IMenuDll menuDllIm = new MenuDllImplicit();
+            IMenuDll menuDllEx = new MenuDllExplicit();
+
+            string usersFileNamePath = "users.txt";
+            string menuFileNamePath = "menu.txt";
+
+            ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService
+                , keyboardStateService, 
+                new Models.UserLoginer(authDllIm, menuDllIm, usersFileNamePath, menuFileNamePath));
             dialogService.ShowWindow(authVM);
+
         }
     }
 }
