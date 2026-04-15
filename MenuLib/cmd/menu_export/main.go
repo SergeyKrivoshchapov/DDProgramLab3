@@ -53,7 +53,7 @@ func GetMenuItem(path *C.char) C.MenuItemStruct {
 	return C.MenuItemStruct{
 		Name:          C.CString(item.Name),
 		Method:        C.CString(item.Method),
-		Status:        C.CString(item.Status),
+		Status:        C.int(item.Status),
 		ChildrenCount: C.int(len(item.Children)),
 	}
 }
