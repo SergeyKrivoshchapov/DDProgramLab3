@@ -30,6 +30,7 @@ func LoadUsersFromFile(fileName string) (int, error) {
 
 		if strings.HasPrefix(line, "#") {
 			// #Name Password
+			line = line[1:]
 			parts := strings.SplitN(line, " ", 2)
 			if len(parts) == 2 {
 				currentUser = &models.User{
