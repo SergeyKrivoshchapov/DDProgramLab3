@@ -29,7 +29,7 @@ namespace Lab4Timp
 
             dialogService.Register<AuthorizationWinVM>(vm => new AuthorizationWindow(vm));
 
-            ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService, keyboardStateService, new Models.UserLoginerMock());
+            ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService, keyboardStateService, new Models.UserLoginer());
             dialogService.ShowWindow(authVM);
         }
     }

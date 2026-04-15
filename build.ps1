@@ -1,5 +1,5 @@
 $ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path | Split-Path -Parent
-$OutputDir = Join-Path $ProjectDir "CLI\FIXFIXFIXFIXFIXFIX\bin\Debug\net10.0"
+$OutputDir = Join-Path $ProjectDir "GUI\Lab4Timp\bin\Debug\net10.0-windows"
 $MenuDLLPath = Join-Path $OutputDir "MenuLib.dll"
 $AuthDLLPath = Join-Path $OutputDir "AuthLib.dll"
 

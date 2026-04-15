@@ -9,20 +9,11 @@ namespace Lab4Timp.Models
         bool Login(string username, string password, out IUserMenuRights rights);
     }
 
-    class UserLoginerMock : IUserLoginer
+    class UserLoginer : IUserLoginer
     {
         public bool Login(string username, string password, out IUserMenuRights rights)
         {
-            if (username == "admin" && password == "admin")
-            {
-                rights = new UserMenuRightsMock();
-                return true;
-            }
-            else
-            {
-                rights = null;
-                return false;
-            }
+            
         }
     }
 }
