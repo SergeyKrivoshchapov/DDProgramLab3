@@ -30,19 +30,27 @@ namespace Lab4Timp
 
             dialogService.Register<AuthorizationWinVM>(vm => new AuthorizationWindow(vm));
 
-            IAuthDll authDllIm = new AuthDllImplicit();
-            //IAuthDll authDllEx = new AuthDllExplicit();
+            try
+            {
+                IAuthDll authDllIm = new AuthDllImplicit();
+                //IAuthDll authDllEx = new AuthDllExplicit();
 
-            IMenuDll menuDllIm = new MenuDllImplicit();
-            //IMenuDll menuDllEx = new MenuDllExplicit();
+                IMenuDll menuDllIm = new MenuDllImplicit();
+                //IMenuDll menuDllEx = new MenuDllExplicit();
 
-            string usersFileNamePath = "users.txt";
-            string menuFileNamePath = "menu.txt";
+                string usersFileNamePath = "users.txt";
+                string menuFileNamePath = "menu.txt";
 
-            ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService
-                , keyboardStateService, 
-                new Models.UserLoginer(authDllIm, menuDllIm, usersFileNamePath, menuFileNamePath));
-            dialogService.ShowWindow(authVM);
+                ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService
+                    , keyboardStateService,
+                    new Models.UserLoginer(authDllIm, menuDllIm, usersFileNamePath, menuFileNamePath));
+                dialogService.ShowWindow(authVM);
+
+            }
+            catch (System.DllNotFoundException ex)
+            {
+                dialogService.ShowMessageBox("Не удалось найти библиотеки.");
+            }
 
         }
     }

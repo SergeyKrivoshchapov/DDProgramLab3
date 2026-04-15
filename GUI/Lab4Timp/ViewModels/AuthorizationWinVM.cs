@@ -44,18 +44,25 @@ namespace Lab4Timp.ViewModels
             _loginer = loginer;
 
             Enter = new RelayCommand(() => {
-                if (_loginer.Login(Username, Password, out IUserMenuRights userMenuRights))
+                try
                 {
-                    var menuVm = new MenuWinVM(userMenuRights.MenuItems, () => {
-                        var authVm = new AuthorizationWinVM(_dialogService, _keyboardStateService, _loginer);
-                        _dialogService.ShowWindow(authVm);
-                    });
-                    _dialogService.ShowWindow(menuVm);
-                    _dialogService.CloseWindow(this);
+                    if (_loginer.Login(Username, Password, out IUserMenuRights userMenuRights))
+                    {
+                        var menuVm = new MenuWinVM(userMenuRights.MenuItems, () => {
+                            var authVm = new AuthorizationWinVM(_dialogService, _keyboardStateService, _loginer);
+                            _dialogService.ShowWindow(authVm);
+                        });
+                        _dialogService.ShowWindow(menuVm);
+                        _dialogService.CloseWindow(this);
+                    }
+                    else
+                    {
+                        _dialogService.ShowMessageBox("Invalid username or password or users info file not found.");
+                    }
                 }
-                else
+                catch (System.DllNotFoundException ex)
                 {
-                    _dialogService.ShowMessageBox("Invalid username or password or users info file not found.");
+                    _dialogService.ShowMessageBox("Не удалось найти Динамически подключаемую библиотеку. Функциональность ограничена.");
                 }
             } );
 
