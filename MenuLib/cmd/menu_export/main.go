@@ -10,8 +10,8 @@ typedef struct {
 	int ChildrenCount;
 } MenuItemStruct;
 */
-
 import "C"
+
 import (
 	"MenuLib/internal/menu"
 	"unsafe"
@@ -74,3 +74,5 @@ func FreeString(str *C.char) {
 		C.free(unsafe.Pointer(str))
 	}
 }
+
+func main() {}

@@ -1,5 +1,5 @@
-$ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path | Split-Path -Parent
-$OutputDir = Join-Path $ProjectDir "GUI\Lab4Timp\bin\Debug\net10.0-windows"
+$ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$OutputDir = Join-Path $ProjectDir "output"
 $MenuDLLPath = Join-Path $OutputDir "MenuLib.dll"
 $AuthDLLPath = Join-Path $OutputDir "AuthLib.dll"
 
@@ -10,38 +10,39 @@ if (!(Test-Path $OutputDir)) {
 Remove-Item -Force -ErrorAction SilentlyContinue $MenuDLLPath
 Remove-Item -Force -ErrorAction SilentlyContinue $AuthDLLPath
 
-Push-Location $ProjectDir
-
 $env:CGO_ENABLED = "1"
 $env:GOOS = "windows"
 $env:GOARCH = "amd64"
 
+# MenuLib
+Push-Location (Join-Path $ProjectDir "MenuLib")
 go mod download
 go mod tidy
-
-go build -buildmode=c-shared -o "$MenuDLLPath" ./MenuLib/cmd/menu_export
-
+go build -buildmode=c-shared -o "$MenuDLLPath" ./cmd/menu_export
 if ($LASTEXITCODE -ne 0) {
     Write-Host "MenuLib build failed"
     Pop-Location
     Read-Host "Press Enter to exit"
     exit 1
 }
+Pop-Location
 
-go build -buildmode=c-shared -o "$AuthDLLPath" ./AuthLib/cmd/auth_export
-
+# AuthLib
+Push-Location (Join-Path $ProjectDir "AuthLib")
+go mod download
+go mod tidy
+go build -buildmode=c-shared -o "$AuthDLLPath" ./cmd/auth_export
 if ($LASTEXITCODE -ne 0) {
     Write-Host "AuthLib build failed"
     Pop-Location
     Read-Host "Press Enter to exit"
     exit 1
 }
-
 Pop-Location
 
 Write-Host ""
-Write-Host "MenuLib.dll saved to: $(Resolve-Path $MenuDLLPath)"
-Write-Host "AuthLib.dll saved to: $(Resolve-Path $AuthDLLPath)"
+Write-Host "MenuLib.dll saved to: $MenuDLLPath"
+Write-Host "AuthLib.dll saved to: $AuthDLLPath"
 Write-Host ""
 Write-Host "Press Enter to exit..." -ForegroundColor Cyan
 Read-Host

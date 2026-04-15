@@ -46,3 +46,5 @@ func FreePermissions(p *C.char) {
 		C.free(unsafe.Pointer(p))
 	}
 }
+
+func main() {}
