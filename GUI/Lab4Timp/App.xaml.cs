@@ -31,17 +31,17 @@ namespace Lab4Timp
             dialogService.Register<AuthorizationWinVM>(vm => new AuthorizationWindow(vm));
 
             IAuthDll authDllIm = new AuthDllImplicit();
-            IAuthDll authDllEx = new AuthDllExplicit();
+            //IAuthDll authDllEx = new AuthDllExplicit();
 
             IMenuDll menuDllIm = new MenuDllImplicit();
-            IMenuDll menuDllEx = new MenuDllExplicit();
+            //IMenuDll menuDllEx = new MenuDllExplicit();
 
             string usersFileNamePath = "users.txt";
             string menuFileNamePath = "menu.txt";
 
             ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService
                 , keyboardStateService, 
-                new Models.UserLoginer(authDllEx, menuDllEx, usersFileNamePath, menuFileNamePath));
+                new Models.UserLoginer(authDllIm, menuDllIm, usersFileNamePath, menuFileNamePath));
             dialogService.ShowWindow(authVM);
 
         }
