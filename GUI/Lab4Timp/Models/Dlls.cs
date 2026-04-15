@@ -7,8 +7,8 @@ namespace Lab4Timp.Models
 {
     public struct MenuItemStruct
     {
-        public string Name;
-        public string Method;
+        public IntPtr Name;
+        public IntPtr Method;
         public int Status; // В go коде возвращается string
         public int ChildrenCount;
     }
@@ -21,7 +21,7 @@ namespace Lab4Timp.Models
 
         string GetPermissions(string userName);
 
-        void FreeAllPermissions(string p);
+        void FreeAllPermissions(IntPtr p);
     }
 
     public interface IMenuDll
@@ -36,24 +36,24 @@ namespace Lab4Timp.Models
 
         void FreeMenuItemFunc(MenuItemStruct menuItem);
 
-        void FreeStringFunc(string str);
+        void FreeStringFunc(IntPtr str);
     }
 
     class AuthDllImplicit : IAuthDll
     {
         private const string AuthDllName = "AuthLib.dll";
 
-        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int LoadUsers(string fileName);
+        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int LoadUsers([MarshalAs(UnmanagedType.LPUTF8Str)] string fileName);
 
-        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int Authenticate(string name, string password);
+        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int Authenticate([MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string password);
 
-        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string GetAllPermissions(string userName);
+        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr GetAllPermissions([MarshalAs(UnmanagedType.LPUTF8Str)] string userName);
 
-        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern void FreePermissions(string p);
+        [DllImport(AuthDllName, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void FreePermissions(IntPtr p);
 
         public int LoadAllUsers(string fileName)
         {
@@ -67,10 +67,13 @@ namespace Lab4Timp.Models
 
         public string GetPermissions(string userName)
         {
-            return GetAllPermissions(userName);
+            IntPtr ptr = GetAllPermissions(userName);
+            string result = Marshal.PtrToStringUTF8(ptr);
+            if (ptr != IntPtr.Zero) FreePermissions(ptr);
+            return result;
         }
 
-        public void FreeAllPermissions(string p)
+        public void FreeAllPermissions(IntPtr p)
         {
             FreePermissions(p);
         }
@@ -81,17 +84,17 @@ namespace Lab4Timp.Models
         private const string AuthDllName = "AuthLib.dll";
         private IntPtr _libraryHandle;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate int LoadUsersDelegate(string fileName);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int LoadUsersDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string fileName);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate int AuthenticateDelegate(string name, string password);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int AuthenticateDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string password);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate string GetAllPermissionsDelegate(string userName);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate IntPtr GetAllPermissionsDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string userName);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate void FreePermissionsDelegate(string p);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void FreePermissionsDelegate(IntPtr p);
 
         private readonly LoadUsersDelegate _loadUsers;
         private readonly AuthenticateDelegate _authenticate;
@@ -119,9 +122,15 @@ namespace Lab4Timp.Models
 
         public int Authorization(string name, string password) => _authenticate(name, password);
 
-        public string GetPermissions(string userName) => _getAllPermissions(userName);
+        public string GetPermissions(string userName)
+        {
+            IntPtr ptr = _getAllPermissions(userName);
+            string result = Marshal.PtrToStringUTF8(ptr);
+            if (ptr != IntPtr.Zero) _freePermissions(ptr);
+            return result;
+        }
 
-        public void FreeAllPermissions(string p) => _freePermissions(p);
+        public void FreeAllPermissions(IntPtr p) => _freePermissions(p);
 
         public void Dispose()
         {
@@ -137,23 +146,23 @@ namespace Lab4Timp.Models
     {
         private const string MenuDllName = "MenuLib.dll";
 
-        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "LoadMenu")]
-        private static extern int LoadMenu(string fileName);
+        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "LoadMenu")]
+        private static extern int LoadMenu([MarshalAs(UnmanagedType.LPUTF8Str)] string fileName);
 
-        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "FilterByPermissions")]
-        private static extern void FilterByPermissionsNative(string permsString);
+        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "FilterByPermissions")]
+        private static extern void FilterByPermissionsNative([MarshalAs(UnmanagedType.LPUTF8Str)] string permsString);
 
         [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetRootCount")]
         private static extern int GetRootCount();
 
-        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "GetMenuItem")]
-        private static extern MenuItemStruct GetMenuItem(string path);
+        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "GetMenuItem")]
+        private static extern MenuItemStruct GetMenuItem([MarshalAs(UnmanagedType.LPUTF8Str)] string path);
 
         [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "FreeMenuItem")]
         private static extern void FreeMenuItem(MenuItemStruct item);
 
-        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "FreeString")]
-        private static extern void FreeString(string str);
+        [DllImport(MenuDllName, CallingConvention = CallingConvention.Cdecl, EntryPoint = "FreeString")]
+        private static extern void FreeString(IntPtr str);
 
         public int LoadMenuItems(string fileName) => LoadMenu(fileName);
 
@@ -165,7 +174,7 @@ namespace Lab4Timp.Models
 
         public void FreeMenuItemFunc(MenuItemStruct menuItem) => FreeMenuItem(menuItem);
 
-        public void FreeStringFunc(string str) => FreeString(str);
+        public void FreeStringFunc(IntPtr str) => FreeString(str);
     }
 
     class MenuDllExplicit : IMenuDll, IDisposable
@@ -173,23 +182,23 @@ namespace Lab4Timp.Models
         private const string MenuDllName = "MenuLib.dll";
         private IntPtr _libraryHandle;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate int LoadMenuDelegate(string fileName);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int LoadMenuDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string fileName);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate void FilterByPermissionsDelegate(string permsString);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void FilterByPermissionsDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string permsString);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int GetRootCountDelegate();
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate MenuItemStruct GetMenuItemDelegate(string path);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate MenuItemStruct GetMenuItemDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string path);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FreeMenuItemDelegate(MenuItemStruct item);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private delegate void FreeStringDelegate(string str);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void FreeStringDelegate(IntPtr str);
 
         private readonly LoadMenuDelegate _loadMenu;
         private readonly FilterByPermissionsDelegate _filterByPermissions;
@@ -231,7 +240,7 @@ namespace Lab4Timp.Models
 
         public void FreeMenuItemFunc(MenuItemStruct menuItem) => _freeMenuItem(menuItem);
 
-        public void FreeStringFunc(string str) => _freeString(str);
+        public void FreeStringFunc(IntPtr str) => _freeString(str);
 
         public void Dispose()
         {

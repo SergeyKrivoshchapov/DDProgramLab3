@@ -93,17 +93,23 @@ namespace Lab4Timp.Models
                 return null;
             }
 
+            string? nameStr = System.Runtime.InteropServices.Marshal.PtrToStringUTF8(nativeItem.Name);
+            string? methodStr = System.Runtime.InteropServices.Marshal.PtrToStringUTF8(nativeItem.Method);
+
             // Не найден
-            if (string.IsNullOrEmpty(nativeItem.Name))
+            if (string.IsNullOrEmpty(nameStr))
+            {
+                _menuDll.FreeMenuItemFunc(nativeItem);
                 return null;
+            }
 
             try
             {
                 var managed = new MenuItem
                 {
-                    Header = nativeItem.Name,
+                    Header = nameStr,
                     // Здесь подставь фабрику команд по имени метода:
-                    Command = ResolveCommand(nativeItem.Method),
+                    Command = ResolveCommand(methodStr ?? string.Empty),
                     IsVisible = nativeItem.Status != 2,
                     IsEnabled = nativeItem.Status != 1
                 };
@@ -121,7 +127,7 @@ namespace Lab4Timp.Models
             finally
             {
                 // Освобождение native-строк Name/Method
-                //_menuDll.FreeMenuItemFunc(nativeItem);
+                _menuDll.FreeMenuItemFunc(nativeItem);
             }
         }
 
