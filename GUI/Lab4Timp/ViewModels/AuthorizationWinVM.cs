@@ -53,6 +53,10 @@ namespace Lab4Timp.ViewModels
                     _dialogService.ShowWindow(menuVm);
                     _dialogService.CloseWindow(this);
                 }
+                else
+                {
+                    _dialogService.ShowMessageBox("Invalid username or password or users info file not found.");
+                }
             } );
 
             Cancel = new RelayCommand(() => {

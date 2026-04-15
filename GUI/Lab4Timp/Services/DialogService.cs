@@ -85,5 +85,10 @@ namespace Lab4Timp.Services
             _openedWindows[viewModel] = window;
             window.Closed += (_, __) => _openedWindows.Remove(viewModel);
         }
+
+        public void ShowMessageBox(string message)
+        {
+            MessageBox.Show(message);
+        }
     }
 }

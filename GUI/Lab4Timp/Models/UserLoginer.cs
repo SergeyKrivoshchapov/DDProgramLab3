@@ -53,7 +53,7 @@ namespace Lab4Timp.Models
                 return false;
             }
 
-            if (string.IsNullOrEmpty(permissions))
+            if (permissions == null)
                 return false;
 
             //_authDll.FreeAllPermissions(permissions);

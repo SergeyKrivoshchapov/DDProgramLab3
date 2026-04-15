@@ -16,5 +16,7 @@ namespace Lab4Timp.Abstraction
         void ShowWindow<TViewModel>() where TViewModel : class, new();
 
         void CloseWindow(object viewModel);
+
+        void ShowMessageBox(string message);
     }
 }

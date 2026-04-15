@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:Lab4Timp.Converters"
         mc:Ignorable="d"
-        Title="MenuWindow" Height="100" Width="300">
+        Title="MenuWindow" Height="100" Width="600">
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>

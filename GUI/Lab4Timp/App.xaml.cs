@@ -41,7 +41,7 @@ namespace Lab4Timp
 
             ViewModels.AuthorizationWinVM authVM = new ViewModels.AuthorizationWinVM(dialogService
                 , keyboardStateService, 
-                new Models.UserLoginer(authDllIm, menuDllIm, usersFileNamePath, menuFileNamePath));
+                new Models.UserLoginer(authDllEx, menuDllEx, usersFileNamePath, menuFileNamePath));
             dialogService.ShowWindow(authVM);
 
         }
