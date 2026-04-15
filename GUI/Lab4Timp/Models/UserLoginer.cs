@@ -35,17 +35,14 @@ namespace Lab4Timp.Models
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                 return false;
 
-            // 1) Загружаем пользователей
             int loadedUsers = _authDll.LoadAllUsers(_usersFileNamePath);
             if (loadedUsers < 0)
                 return false;
 
-            // 2) Аутентификация
             int authResult = _authDll.Authorization(username, password);
             if (authResult != 0)
                 return false;
 
-            // 3) Получаем строку прав
             string permissions;
             try
             {
@@ -59,17 +56,14 @@ namespace Lab4Timp.Models
             if (string.IsNullOrEmpty(permissions))
                 return false;
 
-            _authDll.FreeAllPermissions(permissions);
+            //_authDll.FreeAllPermissions(permissions);
 
-            // 4) Загружаем меню
             int menuLoadResult = _menuDll.LoadMenuItems(_menuFileNamePath);
             if (menuLoadResult != 0)
                 return false;
 
-            // 5) Фильтруем меню по правам
             _menuDll.FilterByPermissions(permissions);
 
-            // 6) Читаем всё дерево
             int rootCount = _menuDll.GetRootCountFunc();
             if (rootCount < 0)
                 return false;
@@ -127,7 +121,7 @@ namespace Lab4Timp.Models
             finally
             {
                 // Освобождение native-строк Name/Method
-                _menuDll.FreeMenuItemFunc(nativeItem);
+                //_menuDll.FreeMenuItemFunc(nativeItem);
             }
         }
 

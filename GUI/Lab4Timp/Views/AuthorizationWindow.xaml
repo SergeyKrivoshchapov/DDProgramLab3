@@ -31,16 +31,16 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="/Resources/keys.jpg" Width="40" Height="40"/>
+            <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="/Resources/keys.jpg" Width="40" Height="40" Margin="3,0,0,0"/>
 
             <TextBlock Grid.Row="0" Grid.Column="1" Text="АИС Отдел кадров" FlowDirection="RightToLeft"
-                       Background="LightYellow"/>
+                       Background="LightYellow" Margin="0,0,5,0"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Версия 1.0.0.0" FlowDirection="RightToLeft" 
-                       Background="Wheat"/>
+                       Background="Wheat" Margin="0,0,5,0"/>
         </Grid>
 
         <TextBlock Grid.Row="1" Text="Введите имя пользователя и пароль" FlowDirection="RightToLeft" 
-                   Background="White"/>
+                   Background="White" Margin="0,0,5,0"/>
         
         <!-- Поле ввода и кнопки Вход, Отмена -->
         
@@ -70,8 +70,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Вход" Height="20" Width="80" HorizontalAlignment="Left" Command="{Binding Enter}"/>
-                <Button Grid.Column="1" Content="Отмена" Height="20" Width="80" HorizontalAlignment="Right" Command="{Binding Cancel}"/>
+                <Button Grid.Column="0" Content="Вход" Height="20" Width="80" HorizontalAlignment="Left" Command="{Binding Enter}" Margin="30,0,0,0"/>
+                <Button Grid.Column="1" Content="Отмена" Height="20" Width="80" HorizontalAlignment="Right" Command="{Binding Cancel}" Margin="0,0,30,0"/>
             </Grid>
         </Grid>
 
@@ -82,7 +82,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" FlowDirection="LeftToRight">
+            <TextBlock Grid.Column="0" FlowDirection="LeftToRight" Margin="3,0,0,0">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="Text" Value="Язык ввода неизвестно"/>
@@ -97,7 +97,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <TextBlock Grid.Column="1" FlowDirection="RightToLeft">
+            <TextBlock Grid.Column="1" FlowDirection="RightToLeft" Margin="0,0,3,0">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="Text" Value="Клавиша CapsLock не нажата"/>
